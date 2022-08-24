@@ -1,0 +1,60 @@
+snakemake =7.6.2
+repeatmasker =4.1.2.p1
+hmmer =3.3.2
+ipython
+
+# Dependencies for augustus. See also https://github.com/Gaius-Augustus/Augustus/issues/358
+zlib 
+boost-cpp 
+gsl 
+htslib
+lp_solve 
+biopython 
+perl 
+perl-app-cpanminus 
+perl-module-build 
+perl-yaml 
+perl-dbi 
+perl-scalar-list-utils 
+perl-file-which 
+perl-parallel-forkmanager 
+sqlite 
+suitesparse 
+cdbtools 
+diamond 
+ucsc-fatotwobit 
+ucsc-twobitinfo 
+bamtools 
+tar
+
+# Dependencies for braker2 - taken from https://raw.githubusercontent.com/bioconda/bioconda-recipes/master/recipes/braker2/meta.yaml
+python >=3.3
+biopython
+gemoma ==1.6.4
+perl
+perl-app-cpanminus
+perl-hash-merge
+perl-parallel-forkmanager
+perl-scalar-util-numeric
+perl-yaml
+perl-class-data-inheritable
+perl-exception-class
+perl-test-pod
+perl-file-homedir
+perl-file-which
+perl-file-spec
+perl-list-moreutils
+perl-logger-simple
+perl-math-utils
+perl-module-load-conditional
+perl-posix
+perl-mce
+bamtools >=2.5.1
+samtools >=1.7
+spaln >=2.3.3
+exonerate >=2.2.0  # Can be used by braker2, but deprecated in favour of genomethreader
+blast >=2.2.31  # Can be used by braker2, but deprecated in favour of diamond
+# makehub
+cdbtools >=0.99
+genomethreader >=1.7.0
+diamond >=0.9.24

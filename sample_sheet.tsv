@@ -1,0 +1,3 @@
+genome_id	genome_fasta	protein_database	repeatmasker_species
+genome01	../test/genome.fa	../test/proteins.fa	plasmodium
+genome02	../test/genome.fa	../test/proteins.fa	NA
