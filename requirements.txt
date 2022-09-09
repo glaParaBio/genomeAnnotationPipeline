@@ -1,6 +1,7 @@
 snakemake =7.6.2
 repeatmasker =4.1.2.p1
 hmmer =3.3.2
+pigz
 ipython
 
 # Dependencies for augustus. See also https://github.com/Gaius-Augustus/Augustus/issues/358

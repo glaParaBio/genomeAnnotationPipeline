@@ -127,7 +127,7 @@ rule prepare_protein_database:
     params:
         taxonomy= lambda wc: ss[ss.genome_id == wc.genome_id].protein_database.iloc[0],
     run:
-        if os.path.isfile(params.pdb):
+        if os.path.isfile(params.taxonomy):
             shell('cp {params.pdb} {output.pdb}')
         else:
             shell(r"""
@@ -136,7 +136,6 @@ rule prepare_protein_database:
                 -l2s {input.orthodb[1]} \
                 -l {input.orthodb[2]} \
                 -s {input.orthodb[3]} \
-                --clean-names \
                 -i {params.taxonomy} > {output.pdb}
                     """)
 
