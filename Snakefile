@@ -3,6 +3,7 @@ import gzip
 import os
 
 INSTALL_PATH = os.environ['CONDA_PREFIX']
+GENEMARK_PATH = os.path.abspath('genemark')
 
 def is_gzip(filename):
     with gzip.open(filename, 'r') as fh:
@@ -12,7 +13,6 @@ def is_gzip(filename):
         except OSError:
             return False
 
-GENEMARK_PATH = os.path.abspath('genemark')
 
 ss = pandas.read_csv(config['sample_sheet'], sep= '\t', comment= '#').dropna(how='all').drop_duplicates()
 
@@ -128,7 +128,7 @@ rule prepare_protein_database:
         taxonomy= lambda wc: ss[ss.genome_id == wc.genome_id].protein_database.iloc[0],
     run:
         if os.path.isfile(params.taxonomy):
-            shell('cp {params.pdb} {output.pdb}')
+            shell('cp {params.taxonomy} {output.pdb}')
         else:
             shell(r"""
             pigz -cd {input.orthodb[0]} \
@@ -140,6 +140,15 @@ rule prepare_protein_database:
                     """)
 
 
+def get_braker_args(ss, genome_id):
+    if 'braker_args' not in ss.columns:
+        return ''
+    args = ss[ss.genome_id == genome_id].braker_args.iloc[0]
+    if pandas.isna(args) or args == '':
+        return ''
+    else:
+        return args
+
 rule braker:
     input:
         augustus= os.path.join(INSTALL_PATH, 'augustus/bin/augustus'),
@@ -150,6 +159,7 @@ rule braker:
         cfg= os.path.abspath('{genome_id}/augustus_config'),
     params:
         gmpath= GENEMARK_PATH,
+        extra_args= lambda wc: get_braker_args(ss, wc.genome_id),
     output:
         gff= '{genome_id}/braker/augustus.hints.gff3',
         aa= '{genome_id}/braker/augustus.hints.aa',
@@ -159,7 +169,8 @@ rule braker:
         rm -rf $outdir
         rm -rf {input.cfg}/species/{wildcards.genome_id}
 
-        braker.pl --genome={input.genome} --prot_seq={input.prot_seq} --softmasking --gff3 --cores 16 --species={wildcards.genome_id} \
+        braker.pl {params.extra_args} \
+            --genome={input.genome} --prot_seq={input.prot_seq} --softmasking --gff3 --cores 16 --species={wildcards.genome_id} \
             --AUGUSTUS_CONFIG_PATH={input.cfg} \
             --AUGUSTUS_BIN_PATH=`dirname {input.augustus}` \
             --AUGUSTUS_SCRIPTS_PATH=`dirname {input.augustus}` \
@@ -202,14 +213,25 @@ rule hmmsearch:
         """
 
 
+rule download_pfam2go:
+    output:
+        pfam2go= 'ref/pfam2go',
+    shell:
+        r"""
+        curl -s -L http://release.geneontology.org/2022-07-01/ontology/external2go/pfam2go > {output.pfam2go}
+        """
+
+
 rule annotate_pfam:
     input:
-        tab= '{genome_id}/hmmer/augustus.hints.tab',
+        dom= '{genome_id}/hmmer/augustus.hints.dom',
         gff= '{genome_id}/braker/augustus.hints.gff3',
         pfam= 'ref/Pfam-A.hmm',
+        pfam2go= 'ref/pfam2go'
     output:
         gff= '{genome_id}/hmmer/augustus.hints.gff3',
     shell:
         r"""
-        {workflow.basedir}/scripts/add_hmmsearch_to_gff.py --gff {input.gff} --tblout {input.tab} --hmm {input.pfam} > {output.gff}
+        {workflow.basedir}/scripts/add_hmmsearch_to_gff.py --gff {input.gff} \
+            --domtbl {input.dom} --hmm {input.pfam} --pfam2go {input.pfam2go} > {output.gff}
         """
