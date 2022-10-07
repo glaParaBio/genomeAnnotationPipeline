@@ -17,7 +17,7 @@ Description
 
 Annotate one or more genome assemblies using
 [BRAKER2](https://github.com/Gaius-Augustus/BRAKER). See the Snakefile for
-exact commands, the main steps are:
+exact commands, the main steps implemented here are:
 
 * Mask repeats in genome using [RepeatMasker](https://www.repeatmasker.org/)
 
@@ -35,9 +35,9 @@ Set up conda env
 Assuming conda, bioconda, and optionally mamba have been already installed:
 
 ```
-conda create -n 20220602_genome_annotation
-conda activate 20220602_genome_annotation
-mamba install -n 20220602_genome_annotation --yes --file requirements.txt
+conda create --yes -n genomeAnnotationPipeline
+conda activate genomeAnnotationPipeline
+mamba install -n genomeAnnotationPipeline --yes --file requirements.txt
 ```
 
 Additional software

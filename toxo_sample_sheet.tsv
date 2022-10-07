@@ -1,5 +1,0 @@
-genome_id	genome_fasta	protein_database	repeatmasker_species
-RH88_GCA_019455545	ref/RH88_GCA_019455545.1_UPITT_Tgon_RH88_1.0_genomic.fna.gz	ref/odb10v1_apicomplexa.fasta	toxoplasma
-CTG_GCA_016808245	ref/CTG_GCA_016808245.1_ASM1680824v1_genomic.fna.gz	ref/odb10v1_apicomplexa.fasta	toxoplasma
-ME49_GCA_019455585	ref/ME49_GCA_019455585.1_ASM1945558v1_genomic.fna.gz	ref/odb10v1_apicomplexa.fasta	toxoplasma
-# ToxoDB-56_TgondiiRH_test	/export/projects/III-data/wcmp_bioinformatics/db291g/Tritume/20220404_snp_calling/output/ref/ToxoDB-56_TgondiiRH.fasta	ref/odb10v1_apicomplexa.fasta	toxoplasma

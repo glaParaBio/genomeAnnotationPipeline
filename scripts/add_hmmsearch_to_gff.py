@@ -167,7 +167,7 @@ def dom2gff(tbldom, chrom, parent_start, parent_end, parent_strand, source='Pfam
 
 parser = argparse.ArgumentParser(description='Add the output of hmmsearch to gff. Typical usage: Get proteins from GFF, find protein domains (e.g. from Pfam) using hmmsearch, use this script to annotate the GFF with these domains')
 parser.add_argument('--gff', '-gff', help='GFF to annotate', required=True)
-parser.add_argument('--domtbl', '-d', help='Domain from `hmmsearch --domtblout <out>` [%(default)s]', required=True, default='-')
+parser.add_argument('--domtblout', '-d', help='Domain from `hmmsearch --domtblout <out>` [%(default)s]', required=True, default='-')
 parser.add_argument('--hmm', '-H', help='Optional file of hmm profiles to extract domain descriptions, typically "Pfam-A.hmm". Use - to read from stdin [%(default)s]', default=None)
 parser.add_argument('--pfam2go', '-g', help='Optional file mapping Pfam domains to GO terms, typically "pfam2go" from http://www.sequenceontology.org/. Use - to read from stdin [%(default)s]', default=None)
 parser.add_argument('--evalue', '-e', help='Include domains with e-value below this cutoff [%(default)s]', default=0.01, type=float)

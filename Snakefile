@@ -233,5 +233,6 @@ rule annotate_pfam:
     shell:
         r"""
         {workflow.basedir}/scripts/add_hmmsearch_to_gff.py --gff {input.gff} \
-            --domtbl {input.dom} --hmm {input.pfam} --pfam2go {input.pfam2go} > {output.gff}
+            --domtblout {input.dom} --hmm {input.pfam} --pfam2go {input.pfam2go} \
+        | {workflow.basedir}/scripts/addGeneIdToGff.py -tss '' > {output.gff}
         """

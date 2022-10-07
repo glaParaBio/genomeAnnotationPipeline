@@ -1,2 +1,7 @@
 /output/
 gmes_linux_64.tar.gz
+.swp
+.tmp
+nohup.out
+.snakemake
+**/tmp/**

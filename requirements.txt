@@ -1,6 +1,8 @@
-snakemake =7.6.2
+snakemake >=7.6.2
+tabulate <0.9 # See https://github.com/snakemake/snakemake/issues/1891
 repeatmasker =4.1.2.p1
 hmmer =3.3.2
+gffutils
 pigz
 ipython
 
