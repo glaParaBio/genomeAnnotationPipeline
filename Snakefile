@@ -1,6 +1,7 @@
 import pandas
 import gzip
 import os
+import shutil
 
 INSTALL_PATH = os.environ['CONDA_PREFIX']
 GENEMARK_PATH = os.path.abspath('genemark')
@@ -52,21 +53,44 @@ rule clean_sequence_names:
         shell(cmd)
 
 
+rule build_repeatmasker_db:
+    # We build the species databases for RepeatMasker serially by running
+    # RepeatMasker on a dummy fasta file. This is to prevent race conditions in
+    # case you run the same species on multiple genomes in parallel.
+    output:
+        rm_database= touch('repeatmasker.db.done'),
+    params:
+        rm_species= set(ss[pandas.isna(ss.repeatmasker_species) == False].repeatmasker_species)
+    run:
+        dummy_fa='repeatmasker.dummy.fasta'
+
+        with open(dummy_fa, 'w') as fa:
+            fa.write('>dummy\nACTG\n')
+
+        for sp in params.rm_species:
+            os.makedirs('tmp_build_repeatmasker_db', exist_ok=True)
+            shell(f'RepeatMasker -dir tmp_build_repeatmasker_db -species {sp} {dummy_fa}')
+            shutil.rmtree('tmp_build_repeatmasker_db')
+            
+        os.remove(dummy_fa)
+
+
 rule mask_genome:
     input:
         genome= '{genome_id}/repeatmasker/{genome_id}.tmp.fa',
+        rm_database= 'repeatmasker.db.done',
     output:
         genome= '{genome_id}/repeatmasker/{genome_id}.masked.fasta',
     params:
-        species= lambda wc: ss[ss.genome_id == wc.genome_id].repeatmasker_species.iloc[0],
+        rm_species= lambda wc: ss[ss.genome_id == wc.genome_id].repeatmasker_species.iloc[0],
     run:
         outdir = os.path.dirname(output.genome)
-        if pandas.isna(params.species):
+        if pandas.isna(params.rm_species):
             shell("cp {input.genome} {output.genome}")
         else:
             shell(r"""
                 rm -f {outdir}/{wildcards.genome_id}.tmp.fa.masked
-                RepeatMasker -pa 20 -dir {outdir} -species {params.species} -xsmall {input.genome}
+                RepeatMasker -pa 20 -dir {outdir} -species {params.rm_species} -xsmall {input.genome}
                 mv {outdir}/{wildcards.genome_id}.tmp.fa.masked {output.genome}
                 """)
 
