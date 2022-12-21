@@ -110,28 +110,26 @@ rule prepare_augustus_config:
         """
 
 
-rule download_orthodb:
-    output:
-        fasta= 'ref/odb10v1_all_fasta.tab.gz',
-        l2s= 'ref/odb10v1_level2species.tab.gz',
-        level= 'ref/odb10v1_levels.tab.gz',
-        species= 'ref/odb10v1_species.tab.gz',
-    shell:
-        r"""
-        cd `dirname {output.fasta}`
-        curl -L -s -O https://v101.orthodb.org/download/odb10v1_all_og_fasta.tab.gz
-        curl -L -s -O https://v101.orthodb.org/download/odb10v1_levels.tab.gz
-        curl -L -s -O https://v101.orthodb.org/download/odb10v1_level2species.tab.gz
-        curl -L -s -O https://v101.orthodb.org/download/odb10v1_species.tab.gz
-        """
-
-
 rule dummy_orthodb_download:
+    # If you use a fasta file for training augustus, do not download orthodb
+    # and just use this dummy file to signal that downloading is done or not
+    # necessary
     output:
         touch('ref/dummy.orthodb'),
 
 
+rule download_orthodb:
+    output:
+        db='ref/{db}',
+    shell:
+        r"""
+        curl -L -s -o {output.db} https://v101.orthodb.org/download/`basename {output.db}`
+        """
+
+
 def protein_database_input(ss, genome_id):
+    # Query the sample sheet to establish whether we need to trigger the
+    # download of orthodb. 
     pdb = ss[ss.genome_id == genome_id].protein_database.iloc[0]
     if os.path.isfile(pdb):
         return 'ref/dummy.orthodb'
