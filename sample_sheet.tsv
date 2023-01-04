@@ -1,3 +1,5 @@
 genome_id	genome_fasta	protein_database	repeatmasker_species
-genome01	../test/genome.fa	../test/proteins.fa	plasmodium
-genome02	../test/genome.fa	../test/proteins.fa	NA
+genome01	../test/genome.fa	../test/proteins_tab.fa	plasmodium
+genome02	../test/genome.fa	../test/proteins_tab.fa	NA
+genome03	../test/genome.fa	https://plasmodb.org/common/downloads/release-59/PbergheiANKA/fasta/data/PlasmoDB-59_PbergheiANKA_AnnotatedProteins.fasta	NA
+#genome04	../test/genome.fa	Apicomplexa	NA

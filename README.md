@@ -75,7 +75,7 @@ Column | Description
 ---------------|------------
 genome_id | A unique identifier for the output sub-directory of this annotation (no spaces or metacharacters)
 genome_fasta | Fasta file of the genome to be annotated
-protein_database | Fasta file of the proteins to use for training or a taxonomy identifier (e.g. Apicomplexa).
+protein_database | Local fasta file or URL (e.g. from [plasmodb](https://plasmodb.org/common/downloads/release-59/PbergheiANKA/fasta/data/PlasmoDB-59_PbergheiANKA_AnnotatedProteins.fasta)) of the proteins to use for training. Alternatively, a taxonomy identifier (e.g. Apicomplexa, see below)
 repeatmasker_species | NCBI taxonomy for option `-species` for repeat masker. E.g. *plasmodium*. Use NA if the genome is already masked
 
 If `protein_database` is a taxonomy, the pipeline downloads

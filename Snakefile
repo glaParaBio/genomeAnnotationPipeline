@@ -2,6 +2,7 @@ import pandas
 import gzip
 import os
 import shutil
+from urllib.parse import urlparse
 
 INSTALL_PATH = os.environ['CONDA_PREFIX']
 GENEMARK_PATH = os.path.abspath('genemark')
@@ -14,6 +15,13 @@ def is_gzip(filename):
         except OSError:
             return False
 
+def uri_validator(x):
+    # https://stackoverflow.com/questions/7160737/how-to-validate-a-url-in-python-malformed-or-not
+    try:
+        result = urlparse(x)
+        return all([result.scheme, result.netloc])
+    except:
+        return False
 
 ss = pandas.read_csv(config['sample_sheet'], sep= '\t', comment= '#').dropna(how='all').drop_duplicates()
 
@@ -131,7 +139,7 @@ def protein_database_input(ss, genome_id):
     # Query the sample sheet to establish whether we need to trigger the
     # download of orthodb. 
     pdb = ss[ss.genome_id == genome_id].protein_database.iloc[0]
-    if os.path.isfile(pdb):
+    if os.path.isfile(pdb) or uri_validator(pdb):
         return 'ref/dummy.orthodb'
     else:
         orthodb= ['ref/odb10v1_all_fasta.tab.gz', \
@@ -151,6 +159,8 @@ rule prepare_protein_database:
     run:
         if os.path.isfile(params.taxonomy):
             shell('cp {params.taxonomy} {output.pdb}')
+        elif uri_validator(params.taxonomy):
+            shell("curl -s -L {params.taxonomy} -o {output.pdb}")
         else:
             shell(r"""
             pigz -cd {input.orthodb[0]} \
@@ -204,8 +214,8 @@ rule braker:
 
 rule download_pfam:
     output:
-        pfam= temp('ref/Pfam-A.hmm'),
-        idx= temp(multiext('ref/Pfam-A.hmm', '.h3f', '.h3i', '.h3m', '.h3p')),
+        pfam= 'ref/Pfam-A.hmm',
+        idx= multiext('ref/Pfam-A.hmm', '.h3f', '.h3i', '.h3m', '.h3p'),
     shell:
         r"""
         curl -s -L https://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam35.0/Pfam-A.hmm.gz | gunzip > {output.pfam}
