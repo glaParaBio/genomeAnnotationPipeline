@@ -131,7 +131,7 @@ rule download_orthodb:
         db='ref/{db}',
     shell:
         r"""
-        curl -L -s -o {output.db} https://v101.orthodb.org/download/`basename {output.db}`
+        curl -L -s -o {output.db} https://data.orthodb.org/download/`basename {output.db}`
         """
 
 
@@ -142,10 +142,10 @@ def protein_database_input(ss, genome_id):
     if os.path.isfile(pdb) or uri_validator(pdb):
         return 'ref/dummy.orthodb'
     else:
-        orthodb= ['ref/odb10v1_all_fasta.tab.gz', \
-                  'ref/odb10v1_level2species.tab.gz', \
-                  'ref/odb10v1_levels.tab.gz', \
-                  'ref/odb10v1_species.tab.gz']
+        orthodb= ['ref/odb11v0_all_fasta.tab.gz', \
+                  'ref/odb11v0_level2species.tab.gz', \
+                  'ref/odb11v0_levels.tab.gz', \
+                  'ref/odb11v0_species.tab.gz']
         return orthodb
 
 
