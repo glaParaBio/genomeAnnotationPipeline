@@ -1,0 +1,67 @@
+#                                                                            --- full sequence --- -------------- this domain -------------   hmm coord   ali coord   env coord
+# target name        accession   tlen query name           accession   qlen   E-value  score  bias   #  of  c-Evalue  i-Evalue  score  bias  from    to  from    to  from    to  acc description of target
+#------------------- ---------- ----- -------------------- ---------- ----- --------- ------ ----- --- --- --------- --------- ------ ----- ----- ----- ----- ----- ----- ----- ---- ---------------------
+TBCA                 PF02970.19    99 g3810.t1             -            190   2.2e-18   66.5   5.0   1   1   1.2e-22   2.4e-18   66.4   4.2     4    84    11    91     8   113 0.91 Tubulin binding cofactor A
+Vps54                PF07928.15   133 g3812.t1             -           2021     2e-11   44.6   0.0   1   1   2.7e-15   5.2e-11   43.2   0.0     2    96  1366  1460  1365  1489 0.88 Vps54-like protein
+UBA                  PF00627.34    37 g3813.t1             -            381     2e-27   94.8   5.0   1   2   4.8e-18   2.4e-14   53.0   0.1     2    37   173   208   172   208 0.97 UBA/TS-N domain
+UBA                  PF00627.34    37 g3813.t1             -            381     2e-27   94.8   5.0   2   2   7.3e-15   3.6e-11   42.8   1.3     4    37   334   367   331   367 0.97 UBA/TS-N domain
+XPC-binding          PF09280.14    57 g3813.t1             -            381   5.9e-22   77.2  11.2   1   1   2.2e-25   1.1e-21   76.4  11.2     1    56   251   306   251   307 0.96 XPC-binding domain
+ubiquitin            PF00240.26    72 g3813.t1             -            381   1.6e-14   53.5   0.0   1   1   5.3e-18   2.6e-14   52.9   0.0     2    71     4    75     3    76 0.96 Ubiquitin family
+Rad60-SLD_2          PF13881.9    111 g3813.t1             -            381   1.6e-05   25.1   0.1   1   1     6e-09   2.9e-05   24.2   0.1     5    99     3    90     1   102 0.74 Ubiquitin-2 like Rad60 SUMO-like
+NDK                  PF00334.22   135 g3814.t1             -            156   5.4e-54  181.9   0.0   1   1   3.2e-58   6.3e-54  181.7   0.0     1   135     7   141     7   141 0.99 Nucleoside diphosphate kinase
+MINDY_DUB            PF04424.16   117 g3819.t1             -            715   2.5e-17   63.1   0.0   1   1   3.8e-21   7.5e-17   61.5   0.0    16    96   139   229    97   241 0.78 MINDY deubiquitinase
+TAF6_C               PF07571.16    90 g3820.t1             -            857   8.3e-07   29.3   1.3   1   1   8.1e-11   1.6e-06   28.4   0.1    14    89   501   579   426   580 0.84 TAF6 C-terminal HEAT repeat domain
+C2                   PF00168.33   103 g3825.t1             -           1044   3.8e-14   53.0   0.0   1   2   9.1e-14   1.8e-09   37.9   0.0     3    90    58   142    56   154 0.88 C2 domain
+C2                   PF00168.33   103 g3825.t1             -           1044   3.8e-14   53.0   0.0   2   2   9.8e-06      0.19   12.1   0.1    19    77   516   581   488   606 0.75 C2 domain
+C2                   PF00168.33   103 g3826.t1             -           1571     8e-12   45.5   0.1   1   1   3.3e-15   6.5e-11   42.6   0.0     4    91  1118  1208  1115  1217 0.83 C2 domain
+SET                  PF00856.31   169 g3828.t1             -           4358   5.6e-19   69.2   0.1   1   1   2.9e-23   5.6e-19   69.2   0.1     1   168  4224  4334  4224  4335 0.79 SET domain
+Peptidase_M13_N      PF05649.16   384 g3831.t1             -           1039   3.5e-71  241.0   0.1   1   1     5e-75   4.9e-71  240.5   0.1     1   384   236   725   236   725 0.81 Peptidase family M13
+Peptidase_M13        PF01431.24   205 g3831.t1             -           1039   9.6e-47  159.4   0.0   1   1   1.6e-48   1.5e-44  152.2   0.0     1   205   789  1037   789  1037 0.89 Peptidase family M13
+PRT6_C               PF18995.3    456 g3833.t1             -           4436   1.3e-33  116.7   0.4   1   1   3.1e-37   3.1e-33  115.5   0.4   314   442  4259  4395  4065  4403 0.79 Proteolysis_6 C-terminal
+zf-UBR               PF02207.23    70 g3833.t1             -           4436   4.4e-16   58.8  12.2   1   1   4.5e-20   4.4e-16   58.8  12.2     2    70   151   217   150   217 0.93 Putative zinc finger in N-recognin (UBR box)
+WD40                 PF00400.35    38 g3835.t1             -           1267   4.9e-23   81.1  28.1   1   2   1.6e-10     1e-06   29.4   0.2     3    37   208   243   206   244 0.91 WD domain, G-beta repeat
+WD40                 PF00400.35    38 g3835.t1             -           1267   4.9e-23   81.1  28.1   2   2   7.4e-10   4.9e-06   27.3   0.1     2    38   773   813   772   813 0.91 WD domain, G-beta repeat
+Utp12                PF04003.15   107 g3835.t1             -           1267   4.1e-09   36.8   0.5   1   1   1.2e-12   7.9e-09   35.9   0.5     4   105  1106  1248  1102  1250 0.83 Dip2/Utp12 Family
+Ubie_methyltran      PF01209.21   233 g3836.t1             -            542   2.3e-78  262.9   0.0   1   2   8.4e-25   2.7e-21   76.1   0.0     4    97   195   347   189   362 0.88 ubiE/COQ5 methyltransferase family
+Ubie_methyltran      PF01209.21   233 g3836.t1             -            542   2.3e-78  262.9   0.0   2   2     1e-57   3.3e-54  183.8   0.0   100   233   404   537   391   537 0.98 ubiE/COQ5 methyltransferase family
+Methyltransf_11      PF08241.15    96 g3836.t1             -            542   6.7e-16   58.9   0.0   1   1   7.9e-17   2.6e-13   50.6   0.0    44    96   403   455   387   455 0.91 Methyltransferase domain
+Methyltransf_25      PF13649.9     97 g3836.t1             -            542   2.5e-15   57.1   0.0   1   1   2.8e-12   9.2e-09   36.0   0.0    47    97   403   451   366   451 0.88 Methyltransferase domain
+Methyltransf_23      PF13489.9    165 g3836.t1             -            542   2.4e-07   30.9   0.0   1   1   1.5e-10   4.8e-07   29.9   0.0    21   163   252   520   226   522 0.64 Methyltransferase domain
+HECT                 PF00632.28   306 g3837.t1             -           8125   9.4e-88  294.7   0.0   1   1   3.6e-91   1.4e-87  294.1   0.0     2   305  7819  8123  7818  8124 0.95 HECT-domain (ubiquitin-transferase)
+DUF908               PF06012.15   358 g3837.t1             -           8125   1.6e-22   80.5  23.5   1   1   2.7e-18   1.1e-14   54.8   0.0   170   357   338   533   305   534 0.81 Domain of Unknown Function (DUF908)
+UBM                  PF14377.9     35 g3837.t1             -           8125   3.5e-20   70.9  16.1   1   3   4.4e-12   1.7e-08   33.7   2.3     5    32  5830  5857  5826  5859 0.89 Ubiquitin binding region
+UBM                  PF14377.9     35 g3837.t1             -           8125   3.5e-20   70.9  16.1   2   3   3.5e-07    0.0014   18.2   0.0     2    31  5926  5955  5925  5957 0.90 Ubiquitin binding region
+UBM                  PF14377.9     35 g3837.t1             -           8125   3.5e-20   70.9  16.1   3   3   7.7e-10     3e-06   26.6   0.1     7    35  5981  6009  5975  6009 0.88 Ubiquitin binding region
+DUF913               PF06025.15   384 g3837.t1             -           8125   2.9e-13   49.7   0.0   1   2   1.2e-11   4.6e-08   32.6   0.0    67   203   890  1023   833  1027 0.87 Domain of Unknown Function (DUF913)
+DUF913               PF06025.15   384 g3837.t1             -           8125   2.9e-13   49.7   0.0   2   2   4.9e-10   1.9e-06   27.2   0.0   339   383  1240  1284  1230  1285 0.93 Domain of Unknown Function (DUF913)
+UBA                  PF00627.34    37 g3837.t1             -           8125   5.5e-08   32.7   0.4   1   1   4.2e-11   1.6e-07   31.1   0.4     3    37  2261  2296  2260  2296 0.97 UBA/TS-N domain
+Oxidored_molyb       PF00174.22   170 g3838.t1             -            650   1.3e-53  181.2   0.0   1   1   2.7e-57   1.8e-53  180.7   0.0     1   170   327   534   327   534 0.95 Oxidoreductase molybdopterin binding domain
+Mo-co_dimer          PF03404.19   138 g3838.t1             -            650   1.2e-20   74.0   0.1   1   1   3.8e-24   2.5e-20   73.1   0.1     2    84   558   649   557   649 0.85 Mo-co oxidoreductase dimerisation domain
+Cyt-b5               PF00173.31    75 g3838.t1             -            650   3.1e-16   59.4   0.0   1   1   8.7e-20   5.7e-16   58.5   0.0     1    75   193   270   193   270 0.91 Cytochrome b5-like Heme/Steroid binding domain
+Pkinase              PF00069.28   264 g3841.t1             -            535   1.6e-53  181.9   0.0   1   1   7.8e-57   2.2e-53  181.5   0.0     5   264    69   331    66   331 0.91 Protein kinase domain
+PK_Tyr_Ser-Thr       PF07714.20   259 g3841.t1             -            535     7e-23   81.3   0.0   1   1   3.6e-26     1e-22   80.8   0.0     5   256    69   326    66   329 0.85 Protein tyrosine and serine/threonine kinase
+EF-hand_1            PF00036.35    29 g3841.t1             -            535   3.7e-13   48.1   5.1   1   1   7.5e-10   2.1e-06   27.0   1.2     2    27   484   509   483   511 0.94 EF hand
+EF-hand_7            PF13499.9     71 g3841.t1             -            535   8.4e-11   42.3   7.3   1   1   1.4e-10   3.9e-07   30.5   2.5     9    71   456   509   447   509 0.86 EF-hand domain pair
+EF-hand_8            PF13833.9     54 g3841.t1             -            535     2e-09   37.2   4.7   1   1     2e-09   5.6e-06   26.2   0.9     1    51   462   508   456   511 0.91 EF-hand domain pair
+EF-hand_5            PF13202.9     25 g3841.t1             -            535   2.6e-07   30.0   1.7   1   1   2.1e-06     0.006   16.1   0.4     8    23   491   506   484   508 0.79 EF hand
+cNMP_binding         PF00027.32    89 g3843.t1             -           3063   5.8e-16   58.5   0.1   1   1   1.1e-12   2.1e-08   34.2   0.0     2    86  2932  3019  2931  3022 0.93 Cyclic nucleotide-binding domain
+UQ_con               PF00179.29   140 g3848.t1             -            220   2.8e-09   36.9   0.1   1   1   2.3e-13   4.5e-09   36.2   0.1    69   122   147   200   137   208 0.85 Ubiquitin-conjugating enzyme
+PI3_PI4_kinase       PF00454.30   250 g3849.t1             -           1584   3.5e-31  109.1   0.1   1   1   6.4e-27   1.3e-22   81.0   0.2   128   243  1408  1522  1393  1529 0.93 Phosphatidylinositol 3- and 4-kinase
+Kinase-like          PF14531.9    288 g3853.t1             -             84   6.9e-16   58.5   0.0   1   1     4e-20   7.9e-16   58.3   0.0   172   237     2    67     1    71 0.93 Kinase-like
+Kinase-like          PF14531.9    288 g3856.t1             -            163   3.1e-35  122.0   0.0   1   1   1.8e-39   3.6e-35  121.8   0.0   172   288     2   118     1   118 0.96 Kinase-like
+Kinase-like          PF14531.9    288 g3859.t1             -            210     2e-67  227.6   0.0   1   1   1.2e-71   2.4e-67  227.4   0.0   124   288     1   165     1   165 0.99 Kinase-like
+OST3_OST6            PF04756.16   293 g3861.t1             -            736   1.5e-23   83.7   1.4   1   1   1.2e-26   2.4e-22   79.8   0.1    27   254   266   543   258   554 0.77 OST3 / OST6 family, transporter family
+TRAM_LAG1_CLN8       PF03798.19   198 g3862.t1             -            409   3.6e-09   36.7   2.4   1   1   5.2e-13     1e-08   35.3   1.3     4   125   126   248   125   261 0.77 TLC domain
+OB_NTP_bind          PF07717.19    83 g3863.t1             -           1558   3.1e-14   53.2   0.0   1   1   1.2e-17   7.7e-14   52.0   0.0     1    80  1307  1407  1307  1410 0.79 Oligonucleotide/oligosaccharide-binding (OB)-fold
+Helicase_C           PF00271.34   111 g3863.t1             -           1558   4.5e-11   43.2   0.0   1   1   1.4e-13   9.3e-10   39.0   0.0    44   111   890   981   875   981 0.92 Helicase conserved C-terminal domain
+HA2                  PF04408.26   107 g3863.t1             -           1558   1.8e-09   37.9   0.0   1   1   2.7e-13   1.8e-09   37.9   0.0     1    77  1043  1172  1043  1210 0.72 Helicase associated domain (HA2)
+#
+# Program:         hmmscan
+# Version:         3.3.2 (Nov 2020)
+# Pipeline mode:   SCAN
+# Query file:      aa.fasta
+# Target file:     ref/Pfam-A.hmm
+# Option settings: hmmscan --tblout hmmscan.tab --domtblout hmmscan.dom --cut_ga --cpu 24 ref/Pfam-A.hmm aa.fasta 
+# Current dir:     /export/III-data/wcmp_bioinformatics/db291g/Tritume/genomeAnnotationPipeline/output
+# Date:            Fri Jan  6 10:07:04 2023
+# [ok]
