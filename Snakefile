@@ -23,6 +23,14 @@ def uri_validator(x):
     except:
         return False
 
+def get_annotation_output(genome_id, source, ext):
+    if source == 'augustus.hints':
+        return f'{genome_id}/braker/augustus.hints.{ext}'
+    elif source == 'spaln':
+        return f'{genome_id}/spaln/spaln.{ext}'
+    else:
+        raise Exception('Invalid source: %s' % source)
+
 ss = pandas.read_csv(config['sample_sheet'], sep= '\t', comment= '#').dropna(how='all').drop_duplicates()
 
 if len(ss.genome_id) != len(set(ss.genome_id)):
@@ -32,14 +40,17 @@ if 'generic' in list(ss.genome_id):
     raise Exception('"generic" is a reserved keyword, choose a different genome_id')
 
 wildcard_constraints:
-    genome_id = '|'.join([re.escape(x) for x in ss.genome_id])
-
+    genome_id = '|'.join([re.escape(x) for x in ss.genome_id]),
+    source = '|'.join([re.escape(x) for x in ['augustus.hints', 'spaln']]),
 
 rule all:
     input:
+        expand('{genome_id}/{genome_id}.gff3', genome_id= ss.genome_id),
         expand('{genome_id}/hmmer/augustus.hints.gff3', genome_id= ss.genome_id),
+        expand('{genome_id}/hmmer/spaln.gff3', genome_id= ss[pandas.isna(ss.reference_proteome) == False].genome_id),
 
 include: 'workflows/installation.smk'
+include: 'workflows/spaln.smk'
 
 rule clean_sequence_names:
     input:
@@ -232,12 +243,12 @@ rule hmmsearch:
     # proteins, vice-versa for hmmsearch). We are interested in the evalue
     # considering the size of Pfam so we set -Z to the size of Pfam.
     input:
-        aa= '{genome_id}/braker/augustus.hints.aa',
+        aa= lambda wc: get_annotation_output(wc.genome_id, wc.source, 'aa'),
         pfam= 'ref/Pfam-A.hmm',
         idx= multiext('ref/Pfam-A.hmm', '.h3f', '.h3i', '.h3m', '.h3p'),
     output:
-        tab= '{genome_id}/hmmer/augustus.hints.tab',
-        dom= '{genome_id}/hmmer/augustus.hints.dom',
+        tab= '{genome_id}/hmmer/{source}.tab',
+        dom= '{genome_id}/hmmer/{source}.dom',
     shell:
         r"""
         db_size=`grep '^ACC ' {input.pfam} | wc -l`
@@ -256,15 +267,54 @@ rule download_pfam2go:
 
 rule annotate_pfam:
     input:
-        dom= '{genome_id}/hmmer/augustus.hints.dom',
-        gff= '{genome_id}/braker/augustus.hints.gff3',
+        gff= lambda wc: get_annotation_output(wc.genome_id, wc.source, 'gff3'),
+        dom= '{genome_id}/hmmer/{source}.dom',
         pfam= 'ref/Pfam-A.hmm',
         pfam2go= 'ref/pfam2go'
     output:
-        gff= '{genome_id}/hmmer/augustus.hints.gff3',
+        gff= '{genome_id}/hmmer/{source}.gff3',
     shell:
         r"""
         {workflow.basedir}/scripts/add_hmmsearch_to_gff.py --gff {input.gff} \
             --domtblout {input.dom} --hmm {input.pfam} --pfam2go {input.pfam2go} \
         | {workflow.basedir}/scripts/addGeneIdToGff.py -tss '' > {output.gff}
         """
+
+
+rule select_spaln:
+    input:
+        braker='{genome_id}/hmmer/augustus.hints.gff3',
+        spaln='{genome_id}/hmmer/spaln.gff3',
+    output:
+        keep=temp('{genome_id}/spaln/keep.txt'),
+        selected=temp('{genome_id}/spaln/selected.gff3'),
+    shell:
+        r"""
+        bedtools intersect -s -v \
+                -a <(awk '$3 == "gene"' {input.spaln}) \
+                -b <(awk '$3 == "gene"' {input.braker}) \
+        | sed 's/.*;gene_id=/gene_id=/; s/;.*/;/' > {output.keep}
+        
+        n=`wc -l {output.keep} | cut -f 1 -d ' '`
+        > {output.selected}
+        if [ $n -gt 0 ]
+        then
+            grep -F -f {output.keep} {input.spaln} > {output.selected}
+        fi
+        """
+
+
+rule merge_annotation:
+    input:
+        braker= '{genome_id}/hmmer/augustus.hints.gff3',
+        spaln= lambda wc: '{genome_id}/spaln/selected.gff3' if pandas.isna(ss[(ss.genome_id == wc.genome_id)].reference_proteome.iloc[0]) is False else [],
+    output:
+        gff='{genome_id}/{genome_id}.gff3',
+    run:
+        if input.spaln == []:
+            shell("cp {input.braker} {output.gff}")
+        else:
+            shell(r"""
+            cat {input.braker} {input.spaln} \
+            | sortBed > {output.gff}
+            """)

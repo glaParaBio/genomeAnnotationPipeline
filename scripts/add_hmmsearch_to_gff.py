@@ -160,11 +160,14 @@ def read_pfam2go(pfam2go, sep='|'):
                                         'go_name': lambda x: sep.join(x)}).reset_index()
     return godf
 
-def dom2gff(tbldom, gff_db, source, parent_feature_type, child_feature_type):
+def dom2gff(tbldom, gff_db, source, featuretype, parent_feature_type, child_feature_type):
     """Convert the rows in tbldom to GFF. tbldom is a DataFrame of hmmer hits
     for a single protein. Return these hits as a list of strings (lines) in GFF format. 
     
     gff_db: GFF database from gffutils.create_db()
+
+    featuretype: Splice domains spanning multiple features across this feature
+    type. Most likely you want this to be CDS
 
     source and feature: Strings for columns 2 and 3 of output GFF. For
     "feature" use a valid sequence ontology term
@@ -193,7 +196,7 @@ def dom2gff(tbldom, gff_db, source, parent_feature_type, child_feature_type):
                 ('ontology_name', ontology_name),
                 ('Ontology_term', Ontology_term)]
         
-        hmm = transcriptToGenome(gff_db, row.protein_id, row.tx_start, row.tx_end, featuretype='CDS', parent_feature_type=parent_feature_type, child_feature_type=child_feature_type)
+        hmm = transcriptToGenome(gff_db, row.protein_id, row.tx_start, row.tx_end, featuretype=featuretype, parent_feature_type=parent_feature_type, child_feature_type=child_feature_type)
 
         i = 1
         pid = gff_db[row.protein_id]
@@ -219,6 +222,7 @@ parser.add_argument('--domtblout', '-d', help='Domain file from `hmmsearch or hm
 parser.add_argument('--hmm', '-H', help='Optional file of hmm profiles to extract domain descriptions, typically "Pfam-A.hmm". Use - to read from stdin [%(default)s]', default=None)
 parser.add_argument('--pfam2go', '-g', help='Optional file mapping Pfam domains to GO terms, typically "pfam2go" from http://www.sequenceontology.org/. Use - to read from stdin [%(default)s]', default=None)
 parser.add_argument('--evalue', '-e', help='Include domains with e-value below this cutoff [%(default)s]', default=0.01, type=float)
+parser.add_argument('--featuretype', '-f', help='Assign and splice domains to this feature type (column 3 in gff) [%(default)s]', default='CDS')
 parser.add_argument('--parent-feature-type', '-p', help='Set this feature type (column 3 in gff) for grouping spliced matches from the same hit [%(default)s]', default='protein_match')
 parser.add_argument('--child-feature-type', '-c', help='Set this feature type (column 3 in gff) for spliced matches [%(default)s]', default='protein_hmm_match')
 parser.add_argument('--version', '-v', action='version', version='%(prog)s v0.3.0')
@@ -253,6 +257,6 @@ if __name__ == '__main__':
         print(feature)
         if feature.id in protein_ids:
             hmm_hits = tbldom[tbldom.protein_id.isin([feature.id])]
-            pfam_out = dom2gff(hmm_hits, gff_db, source='Pfam', parent_feature_type=args.parent_feature_type, child_feature_type=args.child_feature_type)
+            pfam_out = dom2gff(hmm_hits, gff_db, featuretype=args.featuretype, source='Pfam', parent_feature_type=args.parent_feature_type, child_feature_type=args.child_feature_type)
             for out in pfam_out:
                 print(out)
