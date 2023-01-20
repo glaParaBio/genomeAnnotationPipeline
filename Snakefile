@@ -28,6 +28,12 @@ def get_annotation_output(genome_id, source, ext):
         return f'{genome_id}/braker/augustus.hints.{ext}'
     elif source == 'spaln':
         return f'{genome_id}/spaln/spaln.{ext}'
+    elif source == 'miniprot':
+        return f'{genome_id}/miniprot/miniprot.{ext}'
+    elif source == 'galba':
+        return f'{genome_id}/galba/augustus.hints.{ext}'
+    elif source == 'merge':
+        return f'{genome_id}/merge/merge.{ext}'
     else:
         raise Exception('Invalid source: %s' % source)
 
@@ -41,16 +47,14 @@ if 'generic' in list(ss.genome_id):
 
 wildcard_constraints:
     genome_id = '|'.join([re.escape(x) for x in ss.genome_id]),
-    source = '|'.join([re.escape(x) for x in ['augustus.hints', 'spaln']]),
+    source = '|'.join([re.escape(x) for x in ['augustus.hints', 'spaln', 'miniprot', 'galba', 'merge']]),
 
 rule all:
     input:
-        expand('{genome_id}/{genome_id}.gff3', genome_id= ss.genome_id),
-        expand('{genome_id}/hmmer/augustus.hints.gff3', genome_id= ss.genome_id),
-        expand('{genome_id}/hmmer/spaln.gff3', genome_id= ss[pandas.isna(ss.reference_proteome) == False].genome_id),
+        expand('{genome_id}/hmmer/merge.gff3', genome_id= ss.genome_id),
 
 include: 'workflows/installation.smk'
-include: 'workflows/spaln.smk'
+include: 'workflows/galba.smk'
 
 rule clean_sequence_names:
     input:
@@ -223,6 +227,33 @@ rule braker:
         """
 
 
+rule merge_annotation:
+    input:
+        braker= '{genome_id}/braker/augustus.hints.gff3',
+        miniprot='{genome_id}/galba/augustus.hints.gff3',
+    output:
+        gff=temp('{genome_id}/merge/merge.gff3'),
+    run:
+        if input.miniprot == []:
+            shell("cp {input.braker} {output.gff}")
+        else:
+            shell(r"""
+            agat_sp_merge_annotations.pl --gff {input.braker} --gff {input.miniprot} --out {output.gff}
+            """)
+
+
+rule extract_proteins:
+    input:
+        genome=lambda wc: ss[ss.genome_id == wc.genome_id].genome_fasta,
+        gff='{genome_id}/merge/merge.gff3',
+    output:
+        aa='{genome_id}/merge/merge.aa',
+    shell:
+        r"""
+        gffread -y {output.aa} -g {input.genome} {input.gff}
+        """
+
+
 rule download_pfam:
     output:
         pfam= 'ref/Pfam-A.hmm',
@@ -279,42 +310,3 @@ rule annotate_pfam:
             --domtblout {input.dom} --hmm {input.pfam} --pfam2go {input.pfam2go} \
         | {workflow.basedir}/scripts/addGeneIdToGff.py -tss '' > {output.gff}
         """
-
-
-rule select_spaln:
-    input:
-        braker='{genome_id}/hmmer/augustus.hints.gff3',
-        spaln='{genome_id}/hmmer/spaln.gff3',
-    output:
-        keep=temp('{genome_id}/spaln/keep.txt'),
-        selected=temp('{genome_id}/spaln/selected.gff3'),
-    shell:
-        r"""
-        bedtools intersect -s -v \
-                -a <(awk '$3 == "gene"' {input.spaln}) \
-                -b <(awk '$3 == "gene"' {input.braker}) \
-        | sed 's/.*;gene_id=/gene_id=/; s/;.*/;/' > {output.keep}
-        
-        n=`wc -l {output.keep} | cut -f 1 -d ' '`
-        > {output.selected}
-        if [ $n -gt 0 ]
-        then
-            grep -F -f {output.keep} {input.spaln} > {output.selected}
-        fi
-        """
-
-
-rule merge_annotation:
-    input:
-        braker= '{genome_id}/hmmer/augustus.hints.gff3',
-        spaln= lambda wc: '{genome_id}/spaln/selected.gff3' if pandas.isna(ss[(ss.genome_id == wc.genome_id)].reference_proteome.iloc[0]) is False else [],
-    output:
-        gff='{genome_id}/{genome_id}.gff3',
-    run:
-        if input.spaln == []:
-            shell("cp {input.braker} {output.gff}")
-        else:
-            shell(r"""
-            cat {input.braker} {input.spaln} \
-            | sortBed > {output.gff}
-            """)
