@@ -7,16 +7,39 @@ import sys
 from signal import signal, SIGPIPE, SIG_DFL
 signal(SIGPIPE,SIG_DFL)
 
+def get_parents(id, db):
+    """Return a set of all parents of feature id
+    See https://github.com/daler/gffutils/issues/204
+    """ 
+    parents = set()
+    while True:
+        pp = list(db.parents(id, level=1))
+        if pp == []:
+            break 
+        else:
+            id = pp[0]
+            parents.add(id)
+    return parents
+
+def gene_feature_found(db, candidate_gene_features):
+    """This is a simple check that the at least one of the candidate features
+    exists in the gff database
+    """
+    found = False
+    for feature in db.all_features():
+        if feature.featuretype in candidate_gene_features:
+            found = True
+            break
+    return found
+
 parser = argparse.ArgumentParser(description='Add gene ID attribute to GFF features (i.e. to exon, CDS etc)')
-
 parser.add_argument('gff', type= str, help= 'Input GFF file [%(default)s]', default= '-', nargs= '?')
-
 parser.add_argument('--gene-feature', '-g', type= str, help= 'List of feature types (column 3) identifying a gene %(default)s',
         default= ['gene', 'protein_coding_gene', 'ncRNA_gene', 'pseudogene'], nargs= '+')
 parser.add_argument('--geneid', '-id', type= str, help= 'Name of gene ID attribute [%(default)s]', default= 'gene_id')
 parser.add_argument('--overwrite-id', '-o', help= 'Overwrite the geneid attribute if it exists. Default is to exit with error', action= 'store_true')
 parser.add_argument('--add-tss', '-tss', help= 'Add a record to mark the TSS of features of type [%(default)s]. Use "" to skip', default= 'mRNA')
-parser.add_argument('--version', action='version', version='%(prog)s 0.2.0')
+parser.add_argument('--version', action='version', version='%(prog)s 0.3.0')
 
 args = parser.parse_args()
 
@@ -27,16 +50,18 @@ else:
 
 db = gffutils.create_db(''.join(gff), ':memory:', from_string= True, merge_strategy= 'create_unique')
 
+found = gene_feature_found(db, args.gene_feature)
+if not found:
+    sys.stderr.write('\nWARNING: No feature of type %s found in input gff. Check this is expected\n\n' % ', '.join(args.gene_feature))
+
 for d in db.directives:
     print('##%s' % d)
- 
+
 tss_id = 1
 for feature in db.all_features():
-    parents = list(db.parents(feature))
-    #if not args.overwrite_id and args.geneid in feature.attributes:
-    #    print(feature.attributes)
-    #    sys.stderr.write('Error: attribute key "%s" already exists\n' % args.geneid)
-    #    sys.exit(1)
+    if '' in feature.attributes.keys():
+        feature.attributes.pop('')
+    parents = get_parents(feature, db)
     parent_gene = []
     for p in parents:
         if p.featuretype in args.gene_feature:
@@ -54,6 +79,7 @@ for feature in db.all_features():
             sys.stderr.write('Error: attribute key "%s" already exists and it is different from the new one.\nUse --overwrite-id to overwrite\n' % args.geneid)
             sys.exit(1)
         feature.attributes[args.geneid] = gene_id
+
     if args.add_tss != '' and feature.featuretype == args.add_tss:
         if feature.strand == '+':
             start = feature.start

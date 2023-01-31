@@ -1,8 +1,7 @@
 snakemake >=7.15.2
 repeatmasker =4.1.2.p1
 hmmer =3.3.2
-bedtools =2.30.0
-gffread =0.12.7
+agat =1.0.0
 gffutils
 pigz
 ipython
