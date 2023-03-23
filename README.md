@@ -48,9 +48,10 @@ Download the appropriate distribution of
 program. The downloaded file should be named something like `gmes_linux_64.tar.gz`). 
 
 GeneMark is free to use but its license prevents from distributing it so it has
-to be downloaded manually as a `tar.gz` bundle. The pipeline will take care of
-its installation. To check the kernel version of your system and download the
-appropriate distribution execute `uname -r`.
+to be downloaded manually as a `tar.gz` bundle. Copy the key file to
+`~/.gm_key` and the pipeline will take care of its installation. To check the
+kernel version of your system and download the appropriate distribution execute
+`uname -r`.
 
 Run
 ===
