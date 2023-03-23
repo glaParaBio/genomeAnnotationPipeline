@@ -94,19 +94,6 @@ rule install_genemark:
 
         cd {params.gmpath}
 
-        # Copy key if necessary. We assume the key in the tar archive is valid 
-        if [ -f ~/.gm_key ]
-        then
-            my5=`md5sum ~/.gm_key | cut -d ' ' -f 1`
-        else
-            my5='notfound'
-        fi
-        this5=`md5sum gm_key | cut -d ' ' -f 1`
-        if [ "$my5" != "$this5" ]
-        then
-            cp gm_key ~/.gm_key
-        fi
-
         # Use perl on PATH
         perl change_path_in_perl_scripts.pl '/usr/bin/env perl'
         
