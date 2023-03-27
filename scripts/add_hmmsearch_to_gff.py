@@ -85,7 +85,6 @@ def read_tbldom(domfile):
     tbldom.pfam_id = [x.split('.')[0] for x in tbldom.pfam_id]
     if len(tbldom) > 0:
         assert len(tbldom[tbldom.dom_evalue < 0]) == 0
-        assert all([x.startswith('PF') for x in tbldom.pfam_id])
     return tbldom
 
 def get_desc_from_hmm(hmmfile):
@@ -225,7 +224,7 @@ parser.add_argument('--evalue', '-e', help='Include domains with e-value below t
 parser.add_argument('--featuretype', '-f', help='Assign and splice domains to this feature type (column 3 in gff) [%(default)s]', default='CDS')
 parser.add_argument('--parent-feature-type', '-p', help='Set this feature type (column 3 in gff) for grouping spliced matches from the same hit [%(default)s]', default='protein_match')
 parser.add_argument('--child-feature-type', '-c', help='Set this feature type (column 3 in gff) for spliced matches [%(default)s]', default='protein_hmm_match')
-parser.add_argument('--version', '-v', action='version', version='%(prog)s v0.3.0')
+parser.add_argument('--version', '-v', action='version', version='%(prog)s v0.4.0')
 
 if __name__ == '__main__':
     args = parser.parse_args()
