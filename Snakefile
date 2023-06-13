@@ -229,8 +229,8 @@ rule braker:
 
 rule merge_annotation:
     input:
-        braker= '{genome_id}/braker/augustus.hints.gff3',
-        miniprot='{genome_id}/galba/augustus.hints.gff3',
+        braker='{genome_id}/braker/augustus.hints.gff3',
+        miniprot=lambda wc: '{genome_id}/galba/augustus.hints.gff3' if not ss[ss.genome_id == wc.genome_id].reference_proteome.isna().values.any() else [],
     output:
         gff=temp('{genome_id}/merge/merge.gff3'),
     run:

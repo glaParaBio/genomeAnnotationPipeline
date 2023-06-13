@@ -8,6 +8,7 @@
 * [Run](#run)
     * [Input option](#input-option)
 * [Output](#output)
+* [Cluster (`sbatch`) options](#cluster-sbatch-options)
 * [Misc (Ignore me)](#misc-ignore-me)
 
 <!-- vim-markdown-toc -->
@@ -106,6 +107,19 @@ Most relevant files probably are:
 * `{genome_id}/braker/augustus.hints.codingseq`: Fasta file of nucleotide
   sequences of the mRNAs in `augustus.hints.gff3`
 
+
+Cluster (`sbatch`) options
+==============
+
+These are some options to consider for cluster submission via slurm/sbatch:
+
+```
+snakemake --latency 60 \
+    --cluster 'sbatch -o slurm/{rule}.{wildcards}.%j.out \
+                      -e slurm/{rule}.{wildcards}.%j.err \
+                      --job-name {rule}.{wildcards}' \
+    ...
+```
 
 Misc (Ignore me)
 ================
